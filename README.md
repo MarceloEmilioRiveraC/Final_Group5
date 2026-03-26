@@ -1,73 +1,215 @@
-# React + TypeScript + Vite
+# 👕 Fashion Community Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📌 Overview
 
-Currently, two official plugins are available:
+This project is a **Fashion Social Platform** where users can create posts about clothing, interact through comments, and engage with content. Administrators have access to analytics and moderation tools to manage the platform.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The application is built with a strong focus on **Clean Architecture**, ensuring scalability, maintainability, and clear separation of concerns from the beginning.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🎯 Core Features
 
-## Expanding the ESLint configuration
+### 👤 Users
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* Create and view fashion posts
+* Comment on posts
+* Like/interact with content
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 🛠️ Admin
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+* Manage posts (delete/moderate)
+* View analytics (engagement, popularity)
+* Monitor platform activity
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## 🧱 Architecture
+
+This project follows **Clean Architecture principles**, separating responsibilities into distinct layers:
+
+```
+Presentation → Application → Domain ← Infrastructure
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 1. Domain Layer
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+* Contains **core business logic**
+* Independent of frameworks and UI
+* Includes:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+  * Entities (Post, User, Comment)
+  * Repository interfaces
+
+### 2. Application Layer
+
+* Contains **use cases**
+* Orchestrates business rules
+* Examples:
+
+  * GetPosts
+  * CreatePost
+  * AddComment
+
+### 3. Infrastructure Layer
+
+* Handles **external systems**
+* Implements repository interfaces
+* Includes:
+
+  * API communication
+  * Data persistence (MongoDB via backend)
+
+### 4. Presentation Layer
+
+* React UI (Vite + TypeScript)
+* Uses hooks and components
+* Communicates only with **application layer**
+
+---
+
+## 📁 Project Structure
+
 ```
+Final_Group5/
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   ├── domain/
+│   │   ├── application/
+│   │   ├── infrastructure/
+│   │   ├── presentation/
+│   │   └── shared/
+│   │
+│   ├── tsconfig.json
+│   ├── vite.config.ts
+│   └── package.json
+│
+├── backend/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── routes/
+│   │   ├── models/
+│   │   └── services/
+│   │
+│   ├── tsconfig.json
+│   └── package.json
+│
+├── .gitignore
+├── README.md
+```
+
+---
+
+## 🔄 Data Flow
+
+1. UI triggers a **hook**
+2. Hook calls a **use case**
+3. Use case interacts with a **repository interface**
+4. Infrastructure provides the **implementation**
+5. Data flows back to UI
+
+```
+Component → Hook → Use Case → Repository → API/DB
+```
+
+---
+
+## 🧩 Key Design Decisions
+
+* **Dependency inversion**: Domain does not depend on infrastructure
+* **Repository pattern** for data abstraction
+* **Reusable UI components** for consistency
+* **Hooks for state management and logic isolation**
+* **Mock-first approach** before backend integration
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+* React (Vite)
+* TypeScript
+
+### Backend (planned/integration)
+
+* Node.js + Express
+* MongoDB
+
+### Other
+
+* Axios (API communication)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Install dependencies
+
+```
+npm install
+```
+
+### 2. Run development server
+
+```
+npm run dev
+```
+
+---
+
+## 🧪 Development Approach
+
+* Start with **domain and use cases**
+* Use **mock repositories first**
+* Integrate backend only after flow is working
+* Build UI using **small reusable components**
+
+---
+
+## 📐 Coding Guidelines
+
+* Keep components **small and focused**
+* Avoid business logic inside UI
+* Use **interfaces for contracts**
+* Prefer **composition over duplication**
+* Maintain clear separation between layers
+
+---
+
+## 🔮 Future Improvements
+
+* Authentication (user vs admin roles)
+* Real backend integration (MongoDB)
+* Advanced analytics dashboard
+* Image uploads for posts
+* Pagination and performance optimization
+
+---
+
+## ⚠️ Important Notes
+
+* The UI layer must not directly access APIs or databases
+* All data operations must go through **use cases**
+* Repository interfaces define the contract for data access
+* Infrastructure can be replaced without affecting core logic
+
+---
+
+## 🧠 Conceptual Summary
+
+This project is structured to ensure:
+
+* Predictable data flow
+* Easy testing and extension
+* Clear separation between logic and implementation
+* Flexibility to swap technologies without breaking core behavior
+
+---
+
+## 📌 Status
+
+🚧 In progress — currently implementing core post flow and UI structure
+
+---
