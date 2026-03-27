@@ -1,36 +1,24 @@
-import type { IPostRepository } from "../../domain/repositories/IPostRepository";
-import type { Post } from "../../domain/entities/Post";
+import type { IPostRepository } from '@domain/repositories/IPostRepository'
+import type { Post } from '@domain/entities/Post'
+import { api } from '../api/axiosInstance'
 
 export class PostRepository implements IPostRepository {
   async getAll(): Promise<Post[]> {
-  return [
-    {
-      id: "1",
-      title: "Streetwear",
-      description: "Oversized fit",
-      imageUrl: "",
-      createdAt: new Date(),
-      likes: 10,
-      userId: "user1"
-    },
-    {
-      id: "2",
-      title: "Minimal Outfit",
-      description: "Clean look",
-      imageUrl: "",
-      createdAt: new Date(),
-      likes: 25,
-      userId: "user2"
-    }
-  ];
-}
+    const { data } = await api.get('/posts')
+    return data
+  }
 
-  async create(post: Post): Promise<void> {
-    console.log("Creating post", post);
+  async create(post: Partial<Post>): Promise<Post> {
+    const { data } = await api.post('/posts', post)
+    return data
   }
 
   async delete(id: string): Promise<void> {
-    console.log("Deleting post", id);
+    await api.delete(`/posts/${id}`)
+  }
+
+  async like(id: string): Promise<Post> {
+    const { data } = await api.patch(`/posts/${id}/like`)
+    return data
   }
 }
-
