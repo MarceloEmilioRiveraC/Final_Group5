@@ -1,9 +1,17 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
+/**
+ * Vite Config - Build Configuration
+ * 
+ * WHY @tailwindcss/vite: Required for Tailwind CSS v4 to work properly.
+ * This plugin processes @tailwind directives at build time, replacing them
+ * with the compiled CSS. Without it, @tailwind rules won't be recognized.
+ */
 export default defineConfig({
-  plugins: [react()],
+  plugins: [tailwindcss(), react()],
   resolve: {
     alias: {
       '@domain':         path.resolve(__dirname, 'src/domain'),
