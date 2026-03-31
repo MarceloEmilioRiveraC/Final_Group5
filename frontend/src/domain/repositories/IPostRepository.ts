@@ -1,7 +1,8 @@
-import type { Post } from "../entities/Post";
+import type { Post } from '../entities/Post'
 
 export interface IPostRepository {
-  getAll(): Promise<Post[]>;
-  create(post: Post): Promise<void>;
-  delete(id: string): Promise<void>;
+  getAll():                        Promise<Post[]>
+  create(data: Partial<Post>):     Promise<Post>
+  delete(id: string):              Promise<void>
+  like(id: string):                Promise<Post>
 }
