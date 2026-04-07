@@ -20,6 +20,7 @@
  *    - Maintainability: Designer/dev can work on StatCard.tsx without touching this file
  */
 
+import React from 'react'
 import { useStats } from '@presentation/hooks/useStats'
 import {
   LineChart, Line, XAxis, YAxis, Tooltip,
@@ -33,11 +34,6 @@ import type { Stats } from '@domain/entities/Stats'
 /**
  * Validates that the stats object contains all required fields with correct types
  * 
- * WHY: Runtime validation prevents crashes from:
- * - API responses that don't match the Stats interface
- * - Network errors returning partial data
- * - Backend schema changes
- * - Missing or null fields that would cause rendering errors
  * 
  * @param stats - The stats object to validate
  * @returns true if stats object is valid and safe to render
@@ -64,30 +60,26 @@ const validateStatsData = (stats: Stats | null): stats is Stats => {
 export default function StatsPage(): React.ReactElement {
   const { stats, loading, error } = useStats()
 
-  // WHY: Explicit validation before rendering prevents runtime errors
-  const isValidStats = validateStatsData(stats)
 
-  // Loading State: Show spinner while data is fetching
+  const isValidStats = validateStatsData(stats)
   if (loading) return (
     <div className="flex items-center justify-center h-64 text-gray-400">
       Loading stats...
     </div>
   )
 
-  // Error State: Show error message if API call failed
   if (error || !isValidStats) return (
     <div className="flex items-center justify-center h-64 text-red-400">
       {error ?? 'Unable to load stats. Please try again later.'}
     </div>
   )
 
-  // WHY: Transform API data into chart format in one place
-  // This keeps the component rendering logic separate from data manipulation
+
   const chartData = stats.postsPerMonth.map(m => ({
     month: m._id,
     posts: m.count,
   }))
-  console.log('Transformed chart data:', chartData) // Debug log to verify transformation
+  console.log('Transformed chart data:', chartData) 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
 
@@ -133,7 +125,6 @@ export default function StatsPage(): React.ReactElement {
       </div>
 
       {/* Chart Card */}
-      {/* WHY: Extracted to visual hierarchy for better UX scanning */}
       <div className="bg-white rounded-2xl p-6 mb-8 shadow-sm border border-gray-100">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -172,7 +163,6 @@ export default function StatsPage(): React.ReactElement {
             />
 
             {/* Line: Main data visualization */}
-            {/* WHY: Purple color matches brand, monotone interpolation smooths curve */}
             <Line
               type="monotone"
               dataKey="posts"
@@ -186,8 +176,6 @@ export default function StatsPage(): React.ReactElement {
       </div>
 
       {/* Bottom row: Featured post + Summary stats */}
-      {/* WHY 3-column grid: 2 cols for post (more visual), 1 col for stats list
-          Visually balances the page and highlights top-performing content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* Top post spotlight section */}
@@ -196,10 +184,8 @@ export default function StatsPage(): React.ReactElement {
             <h2 className="text-base font-semibold text-gray-800">Top post</h2>
           </div>
           
-          {/* WHY: Conditional rendering prevents errors when topPost is null */}
           {stats.topPost ? (
             <div className="flex items-center gap-4">
-              {/* Image: Visual content preview helps users recognize posts quickly */}
               <img
                 src={stats.topPost.imageUrl}
                 alt={stats.topPost.title}
@@ -221,17 +207,15 @@ export default function StatsPage(): React.ReactElement {
           )}
         </div>
 
-        {/* Summary stats section */}
-        {/* WHY: Separate summary card provides quick reference of key numbers
+        {/* Summary stats section 
             Complements the detail cards above with aggregated view */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <h2 className="text-base font-semibold text-gray-800 mb-4">Summary</h2>
-          {/* WHY: Use SummaryRow component for consistency and maintainability */}
           <ul className="space-y-4">
             <SummaryRow label="Total posts"  value={stats.totalPosts} />
             <SummaryRow label="Total users"  value={stats.totalUsers} />
             <SummaryRow label="Total likes"  value={stats.totalLikes} />
-            {/* WHY: Guard against division by zero with ternary
+            {/*Guard against division by zero with ternary
                 Calculate average safely: if no posts, show 0 */}
             <SummaryRow
               label="Avg likes/post"
