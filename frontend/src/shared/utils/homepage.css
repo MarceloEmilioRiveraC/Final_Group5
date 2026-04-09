@@ -1,0 +1,242 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.home-page {
+  font-family: 'Lato', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Top Bar ── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 72px;
+  background: #faf9f7;
+  border-bottom: 1px solid #ece9e4;
+}
+
+.brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #1a1a2e;
+}
+
+.lotus-icon {
+  display: flex;
+  align-items: center;
+justify-content: center;
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.login-text {
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #1a1a2e;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.login-text:hover {
+  opacity: 0.65;
+}
+
+.nav-bar {
+  background: #5e2070;
+  padding: 2px 24px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  height: 52px;
+}
+
+.nav-link {
+  font-family: 'Lato', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0 28px;
+  transition: opacity 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  opacity: 0.85;
+}
+
+.separator {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 20px;
+  line-height: 1;
+  user-select: none;
+}
+
+.hero-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex: 1;
+  min-height: 620px;
+}
+
+.hero-panel {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 64px;
+  overflow: hidden;
+  cursor: default;
+}
+
+.panel-artist {
+  background-image: url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=80');
+  background-size: cover;
+  background-position: center top;
+}
+
+.panel-shop {
+  background-image: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80');
+  background-size: cover;
+  background-position: center top;
+}
+
+.panel-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 5, 20, 0.15) 0%,
+    rgba(10, 5, 20, 0.55) 45%,
+    rgba(10, 5, 20, 0.72) 100%
+  );
+  z-index: 1;
+}
+
+.panel-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #ffffff;
+  max-width: 480px;
+  padding: 0 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: fadeUp 0.7s ease both;
+}
+
+.panel-shop .panel-content {
+  animation-delay: 0.1s;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.panel-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1.1;
+  color: #ffffff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+.panel-desc {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 380px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.panel-cta-text {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+  padding: 18px 48px;
+  background: #c9a0d8;
+  color: #1a1a2e;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 60px;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.pill-btn:hover {
+  background: #b887cc;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+}
+
+.pill-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .hero-split {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .hero-panel {
+    min-height: 480px;
+  }
+
+  .top-bar {
+    padding: 0 20px;
+  }
+
+  .nav-link {
+    padding: 0 16px;
+    font-size: 15px;
+  }
+}

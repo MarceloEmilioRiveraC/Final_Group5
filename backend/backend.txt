@@ -1,0 +1,26 @@
+backend
+├── package.json
+├── tsconfig.json
+└── src
+    ├── app.ts
+    ├── index.ts
+    ├── config
+    │   └── db.ts
+    ├── controllers
+    │   ├── postController.ts
+    │   ├── statsController.ts
+    │   ├── userController.ts
+    ├── middleware
+    │   ├── auth.ts
+    │   └── errorHandler.ts
+    ├── models
+    │   ├── Post.ts
+    │   ├── User.ts
+    ├── routes
+    │   ├── postRoutes.ts
+    │   ├── statsRoutes.ts
+    │   ├── userRoutes.ts
+    └── services
+        ├── postService.ts
+        ├── statsService.ts
+        ├── userService.ts
