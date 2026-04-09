@@ -1,6 +1,13 @@
 export interface User {
-  id: string;
+  _id: string;
   email: string;
-  role: 'user' | 'admin';
-  createdAt: Date;
+  name: string;
+  role: 'admin' | 'customer';
+  createdAt?: Date;
+}
+
+export interface AuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: User;
 }
