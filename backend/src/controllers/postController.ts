@@ -19,7 +19,7 @@ export const create = async (req: Request, res: Response) => {
   }
 }
 
-[2:44 PM, 4/7/2026] Marce✌️: export const remove = async (req: Request, res: Response) => {
+export const remove = async (req: Request, res: Response) => {
   try {
     await postService.deletePost(req.params.id)
     res.json({ message: 'Post deleted' })
