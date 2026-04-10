@@ -21,4 +21,14 @@ export class PostRepository implements IPostRepository {
     const { data } = await api.patch(`/posts/${id}/like`)
     return data
   }
+
+  async share(id: string): Promise<Post> {
+    const { data } = await api.patch(`/posts/${id}/share`)
+    return data
+  }
+
+  async buy(id: string): Promise<Post> {
+    const { data } = await api.patch(`/posts/${id}/buy`)
+    return data
+  }
 }
