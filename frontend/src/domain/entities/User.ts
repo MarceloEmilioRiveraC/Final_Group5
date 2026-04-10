@@ -4,3 +4,9 @@ export interface User {
   role: 'user' | 'admin';
   createdAt: Date;
 }
+
+export interface AuthToken {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+}
