@@ -1,4 +1,4 @@
- import mongoose from 'mongoose'
+import mongoose from 'mongoose'
 
 const PostSchema = new mongoose.Schema({
   _id:        { type: String, required: true, unique: true },
@@ -12,3 +12,4 @@ const PostSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 export const PostModel = mongoose.model('Post', PostSchema)
+ 
