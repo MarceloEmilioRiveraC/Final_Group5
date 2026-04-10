@@ -36,3 +36,21 @@ export const like = async (req: Request, res: Response) => {
     res.status(404).json({ message: e.message })
   }
 }
+
+export const share = async (req: Request, res: Response) => {
+  try {
+    const post = await postService.sharePost(req.params.id)
+    res.json(post)
+  } catch (e: any) {
+    res.status(404).json({ message: e.message })
+  }
+}
+
+export const bought = async (req: Request, res: Response) => {
+  try {
+    const post = await postService.boughtPost(req.params.id)
+    res.json(post)
+  } catch (e: any) {
+    res.status(404).json({ message: e.message })
+  }
+}
