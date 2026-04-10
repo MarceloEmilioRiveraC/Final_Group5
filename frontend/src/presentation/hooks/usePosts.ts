@@ -5,6 +5,8 @@ import { getPosts }   from '@application/posts/getPosts'
 import { createPost } from '@application/posts/createPost'
 import { deletePost } from '@application/posts/deletePost'
 import { likePost }   from '@application/posts/likePost'
+import { sharePost }  from '@application/posts/sharePost'
+import { boughtPost } from '@application/posts/boughtPost'
 
 const repo = new PostRepository()
 
@@ -40,7 +42,17 @@ export const usePosts = () => {
     setPosts(prev => prev.map(p => p._id === id ? updated : p))
   }
 
+  const handleShare = async (id: string) => {
+    const updated = await sharePost(repo, id)
+    setPosts(prev => prev.map(p => p._id === id ? updated : p))
+  }
+
+  const handleBuy = async (id: string) => {
+    const updated = await boughtPost(repo, id)
+    setPosts(prev => prev.map(p => p._id === id ? updated : p))
+  }
+
   useEffect(() => { load() }, [])
 
-  return { posts, loading, error, handleCreate, handleDelete, handleLike }
+  return { posts, loading, error, handleCreate, handleDelete, handleLike, handleShare, handleBuy }
 }
