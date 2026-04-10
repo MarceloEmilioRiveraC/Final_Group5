@@ -6,8 +6,8 @@ export interface User {
   createdAt?: Date;
 }
 
-export interface AuthResponse {
+export interface AuthToken {
   accessToken: string;
   refreshToken: string;
-  user: User;
+  expiresIn: number;
 }

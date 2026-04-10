@@ -5,5 +5,7 @@ export interface Post {
   imageUrl: string;
   createdAt: Date;
   likes: number;
+  shared: number;
+  bought: number;
   userId: string;
 }
