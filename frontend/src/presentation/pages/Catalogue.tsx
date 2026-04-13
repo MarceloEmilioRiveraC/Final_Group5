@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Search, X, SlidersHorizontal, Heart } from 'lucide-react';
+import { Search, X, SlidersHorizontal, Heart, ShoppingCart } from 'lucide-react';
 import type { Category, Product } from '@domain/entities/Category'
 import { useCatalogue } from '@presentation/hooks/useCatalogue'
+import { postsApi } from '@infrastructure/services/postsAPI'
 import '@shared/utils/catalogue.css'
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -87,6 +88,37 @@ function ProductCard({ product, isTrending }: { product: Product; isTrending: bo
   const imgSrc = safeImage(product.images);
   const [imgError, setImgError] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [likeLoading, setLikeLoading] = useState(false);
+  const [buyLoading, setBuyLoading] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const [buyCount, setBuyCount] = useState(0);
+
+  const handleLike = async () => {
+    if (likeLoading) return;
+    setLikeLoading(true);
+    try {
+      await postsApi.likePost(String(product.id));
+      setLiked(true);
+      setLikeCount(likeCount + 1);
+    } catch (err) {
+      console.error('Failed to like product:', err);
+    } finally {
+      setLikeLoading(false);
+    }
+  };
+
+  const handleBuy = async () => {
+    if (buyLoading) return;
+    setBuyLoading(true);
+    try {
+      await postsApi.buyPost(String(product.id));
+      setBuyCount(buyCount + 1);
+    } catch (err) {
+      console.error('Failed to buy product:', err);
+    } finally {
+      setBuyLoading(false);
+    }
+  };
 
   return (
     <div className="product-card">
@@ -108,10 +140,12 @@ function ProductCard({ product, isTrending }: { product: Product; isTrending: bo
 
         <button
           className={`like-btn ${liked ? 'liked' : ''}`}
-          onClick={() => setLiked(!liked)}
+          onClick={handleLike}
+          disabled={likeLoading}
           aria-label="Like"
         >
           <Heart size={16} fill={liked ? '#e11d48' : 'none'} />
+          {likeCount > 0 && <span className="count">{likeCount}</span>}
         </button>
       </div>
 
@@ -119,6 +153,20 @@ function ProductCard({ product, isTrending }: { product: Product; isTrending: bo
         <p className="card-category">{product.category.name}</p>
         <h3 className="card-title">{product.title}</h3>
         <p className="card-price">${product.price.toLocaleString()}</p>
+        
+        <div className="card-stats">
+          <span className="stat-item">♥ {likeCount}</span>
+          <span className="stat-item">🛒 {buyCount}</span>
+        </div>
+
+        <button
+          className={`buy-btn ${buyLoading ? 'loading' : ''}`}
+          onClick={handleBuy}
+          disabled={buyLoading}
+        >
+          <ShoppingCart size={16} />
+          {buyLoading ? 'Buying...' : 'Buy Now'}
+        </button>
       </div>
     </div>
   );

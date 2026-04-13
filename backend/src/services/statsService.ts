@@ -1,4 +1,4 @@
-import { PostModel } from '../models/Post'
+import { PostModel } from '../models/Posts'
 import { UserModel } from '../models/User'
 
 export const getStats = async () => {

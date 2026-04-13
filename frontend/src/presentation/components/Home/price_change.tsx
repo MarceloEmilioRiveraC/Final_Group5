@@ -23,7 +23,7 @@ export const PriceChange = ({ posts }: PriceChangeProps) => {
       
       <div className="space-y-4">
         {postsWithTrend.map((post) => (
-          <div key={post.id} className="flex items-end justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+          <div key={post._id} className="flex items-end justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
             <div className="flex-1">
               <h3 className="font-semibold text-gray-800 truncate">{post.title}</h3>
               <p className="text-sm text-gray-600 line-clamp-2">{post.description}</p>
