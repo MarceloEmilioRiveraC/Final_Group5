@@ -20,6 +20,7 @@ export const create = async (req: Request, res: Response) => {
 }
 
 export const remove = async (req: Request, res: Response) => {
+export const remove = async (req: Request, res: Response) => {
   try {
     await postService.deletePost(req.params.id)
     res.json({ message: 'Post deleted' })
@@ -54,3 +55,4 @@ export const bought = async (req: Request, res: Response) => {
     res.status(404).json({ message: e.message })
   }
 }
+

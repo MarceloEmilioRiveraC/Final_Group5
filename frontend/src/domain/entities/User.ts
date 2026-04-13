@@ -6,6 +6,12 @@ export interface User {
   createdAt?: Date;
 }
 
+export interface AuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: User;
+}
+
 export interface AuthToken {
   accessToken: string;
   refreshToken: string;
