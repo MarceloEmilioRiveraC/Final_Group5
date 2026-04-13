@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "target": "ES2022",
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
@@ -10,6 +11,7 @@
 
     "baseUrl": ".",
     "paths": {
+      "@app/*":             ["src/app/*"],
       "@domain/*":          ["src/domain/*"],
       "@application/*":     ["src/application/*"],
       "@infrastructure/*":  ["src/infrastructure/*"],

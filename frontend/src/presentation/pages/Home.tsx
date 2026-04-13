@@ -1,5 +1,6 @@
 
 import { useState } from 'react'
+import { Header } from '@presentation/components/common/Header'
 import '../../shared/utils/homepage.css'
 
 export function HomePage() {
@@ -7,17 +8,7 @@ export function HomePage() {
 
   return (
     <div className="home-page">
-      <header className="top-bar">
-        <span className="brand">INSPIRER</span>
-        <div className="lotus-icon" aria-hidden="true">
-          <svg width="48" height="40" viewBox="0 0 48 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Lotus Icon */}
-          </svg>
-        </div>
-        <div className="top-bar-right">
-          <span className="login-text">Login</span>
-        </div>
-      </header>
+      <Header />
 
       <nav className="nav-bar">
         <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>

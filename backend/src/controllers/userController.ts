@@ -1,45 +1,84 @@
-import { Request, Response } from 'express'
+import { Response } from 'express'
 import * as userService from '../services/userService'
 import { AuthRequest } from '../middleware/auth'
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req: any, res: Response) => {
   try {
-    const user = await userService.registerUser(req.body)
-    res.status(201).json({ message: 'User registered successfully', user })
+    const { email, password, name, role } = req.body
+
+    if (!email || !password || !name) {
+      return res
+        .status(400)
+        .json({ message: 'Email, password, and name are required' })
+    }
+
+    const user = await userService.registerUser({
+      email,
+      password,
+      name,
+      role,
+    })
+
+    res.status(201).json({
+      message: 'User registered successfully',
+      user,
+    })
   } catch (error: any) {
     res.status(400).json({ message: error.message })
   }
 }
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: any, res: Response) => {
   try {
-    const result = await userService.loginUser(req.body)
+    const { email, password } = req.body
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: 'Email and password are required' })
+    }
+
+    const result = await userService.loginUser({ email, password })
+
     res.json(result)
   } catch (error: any) {
     res.status(401).json({ message: error.message })
   }
 }
 
-export const refreshToken = async (req: Request, res: Response) => {
+export const refreshToken = async (req: any, res: Response) => {
   try {
     const { refreshToken } = req.body
-    const result = await userService.refreshAccessToken(refreshToken)
+
+    if (!refreshToken) {
+      return res.status(400).json({ message: 'Refresh token is required' })
+    }
+
+    const result = userService.refreshAccessToken(refreshToken)
+
     res.json(result)
   } catch (error: any) {
-    res.status(401).json({ message: error.message })
+    res.status(403).json({ message: error.message })
   }
 }
 
 export const getProfile = async (req: AuthRequest, res: Response) => {
   try {
-    if (!req.user) return res.status(401).json({ message: 'Not authenticated' })
-    const user = await userService.getUserByEmail(req.user.email)
-    res.json({ message: 'User profile retrieved', user })
+    const user = await userService.getUserByEmail(req.user!.email)
+
+    res.json({
+      message: 'User profile retrieved',
+      user,
+    })
   } catch (error: any) {
-    res.status(400).json({ message: error.message })
+    res.status(404).json({ message: error.message })
   }
 }
 
-export const logout = async (req: AuthRequest, res: Response) => {
-  res.status(204).send()
+export const logout = async (_req: AuthRequest, res: Response) => {
+  try {
+    res.status(204).json({ message: 'Logged out successfully' })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
