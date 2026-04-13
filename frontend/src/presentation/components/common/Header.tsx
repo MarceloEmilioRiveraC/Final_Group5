@@ -1,59 +1,49 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@app/providers/AuthProvider'
-import { Button } from './Buttons.tsx'
 
 export const Header = () => {
-  const { user, logout, isLoading } = useAuth()
+  const { user, logout } = useAuth()
   const navigate = useNavigate()
 
   const handleLogout = async () => {
-    try {
-      await logout()
-      navigate('/login')
-    } catch (error) {
-      console.error('Logout failed:', error)
-    }
+    await logout()
+    navigate('/login')
   }
 
   return (
-    <header className="bg-white shadow">
-      <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold text-purple-600">👗 Fashion Community</h1>
-        </div>
+    <div>
+      {/* Top Bar */}
+      <div className="bg-white px-6 py-4 flex justify-between items-center shadow">
+        <h1 className="text-2xl font-semibold tracking-wide text-gray-800">
+          INSPIRER
+        </h1>
 
-        <nav className="flex items-center gap-6">
-          <a
-            href="/home"
-            className="text-gray-700 hover:text-purple-600 font-medium transition"
-          >
-            Home
-          </a>
-          <a
-            href="/stats"
-            className="text-gray-700 hover:text-purple-600 font-medium transition"
-          >
-            Stats
-          </a>
-
-          <div className="flex items-center gap-4 pl-4 border-l border-gray-300">
-            <div className="text-right">
-              <p className="text-sm font-medium text-gray-700">{user?.name}</p>
-              <p className="text-xs text-gray-500">
-                {user?.role === 'admin' ? '👑 Admin' : '👤 Customer'}
-              </p>
-            </div>
-            <Button
+        <div className="flex items-center gap-4">
+          {user ? (
+            <button
               onClick={handleLogout}
-              variant="secondary"
-              size="sm"
-              disabled={isLoading}
+              className="text-sm text-gray-600 hover:text-purple-600"
             >
               Logout
-            </Button>
-          </div>
-        </nav>
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate('/login')}
+              className="text-sm text-gray-600 hover:text-purple-600"
+            >
+              Login
+            </button>
+          )}
+        </div>
       </div>
-    </header>
+
+      {/* Purple Navbar */}
+      <div className="bg-purple-900 text-white py-3 flex justify-center gap-8 font-medium">
+        <a href="/" className="hover:text-gray-300">Home</a>
+        <a href="#" className="hover:text-gray-300">About</a>
+        <a href="#" className="hover:text-gray-300">Q&A</a>
+        <a href="#" className="hover:text-gray-300">Contact</a>
+      </div>
+    </div>
   )
 }

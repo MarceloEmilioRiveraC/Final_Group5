@@ -28,10 +28,9 @@ export const likePost = async (id: string) => {
     { new: true }
   )
   if (!post) throw new Error('Post not found')
-  
-  // Increment stats
+
   await statsService.incrementLikes()
-  
+
   return post
 }
 
@@ -42,10 +41,9 @@ export const sharePost = async (id: string) => {
     { new: true }
   )
   if (!post) throw new Error('Post not found')
-  
-  // Increment stats
+
   await statsService.incrementShares()
-  
+
   return post
 }
 
@@ -56,14 +54,8 @@ export const boughtPost = async (id: string) => {
     { new: true }
   )
   if (!post) throw new Error('Post not found')
-  
-  // Increment stats
+
   await statsService.incrementBuys()
-  
-  
-  // Increment stats
-  await statsService.incrementLikes()
-  
+
   return post
 }
-
