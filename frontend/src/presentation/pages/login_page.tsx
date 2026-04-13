@@ -1,81 +1,63 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@app/providers/AuthProvider';
-import { Input } from '@presentation/components/common/Inputs';
-import { Button } from '@presentation/components/common/Buttons';
+import { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import { useAuth } from '@app/providers/AuthProvider'
 
 export const LoginPage = () => {
-  const navigate = useNavigate();
-  const { login, isLoading, error, clearError } = useAuth();
-  const [email, setEmail] = useState('admin@fashion.com');
-  const [password, setPassword] = useState('admin123');
-  const [localError, setLocalError] = useState<string | null>(null);
+  const navigate = useNavigate()
+  const { login } = useAuth()
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLocalError(null);
-    clearError();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
-    try {
-      await login(email, password);
-      navigate('/home');
-    } catch (err: any) {
-      setLocalError(err.response?.data?.message || 'Login failed');
-    }
-  };
-
-  const displayError = error || localError;
+  const handleSubmit = async (e: any) => {
+    e.preventDefault()
+    await login(email, password)
+    navigate('/')
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
-      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center mb-2 text-gray-800">Login</h1>
-        <p className="text-center text-gray-600 text-sm mb-6">Fashion Community Platform</p>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Email"
-            type="email"
-            placeholder="your@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
 
-          <Input
-            label="Password"
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+      <div className="bg-white rounded-lg shadow-lg flex w-[900px]">
 
-          {displayError && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
-              {displayError}
-            </div>
-          )}
+        {/* Left image */}
+        <div
+          className="w-1/2 bg-cover bg-center"
+          style={{ backgroundImage: "url('/images/login.jpg')" }}
+        ></div>
 
-          <p className="text-xs text-gray-500 italic">
-            Demo: admin@fashion.com / admin123
+        {/* Right form */}
+        <div className="w-1/2 p-8">
+          <h2 className="text-2xl font-bold mb-6">Login</h2>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="email"
+              placeholder="Email"
+              className="w-full border p-3 rounded"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <input
+              type="password"
+              placeholder="Password"
+              className="w-full border p-3 rounded"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <button className="w-full bg-purple-700 text-white py-3 rounded">
+              Sign In
+            </button>
+          </form>
+
+          <p className="mt-4 text-sm">
+            Don’t have an account?{' '}
+            <Link to="/register" className="text-purple-600">
+              Register
+            </Link>
           </p>
-
-          <Button 
-            type="submit" 
-            variant="primary" 
-            loading={isLoading} 
-            className="w-full"
-            disabled={isLoading}
-          >
-            Sign In
-          </Button>
-        </form>
-
-        <p className="text-center text-gray-600 text-sm mt-6">
-          Don't have an account? <a href="/register" className="text-blue-500 hover:underline font-semibold">Sign up</a>
-        </p>
+        </div>
       </div>
     </div>
-  );
-};
+  )
+}
