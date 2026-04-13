@@ -21,6 +21,7 @@
  */
 
 import React from 'react'
+import { Header } from '@presentation/components/common/Header'
 import { useStats } from '@presentation/hooks/useStats'
 import {
   LineChart, Line, XAxis, YAxis, Tooltip,
@@ -81,43 +82,45 @@ export default function StatsPage(): React.ReactElement {
   }))
   console.log('Transformed chart data:', chartData) 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      <div className="p-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold text-gray-800">Analytics Dashboard</h1>
+          <p className="text-sm text-gray-400 mt-1">
+            Welcome back! Here's what's happening on the platform today.
+          </p>
+        </div>
 
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-gray-800">Analytics Dashboard</h1>
-        <p className="text-sm text-gray-400 mt-1">
-          Welcome back! Here's what's happening on the platform today.
-        </p>
-      </div>
-
-      {/* Stat cards grid */}
-      {/* WHY 4-column grid: Desktop-first responsive design
-          - 1 col on mobile, 2 on tablet, 4 on desktop
-          - Each card shows a key metric with trends
-          - Icons provide visual scanning capability */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {/* WHY StatCard as component: Consistent styling, easier to update all at once */}
-        <StatCard
-          label="Total Posts"
-          value={stats.totalPosts.toLocaleString()}
-          icon={<PostIcon />}
-          trend="+12.5%"
-        />
-        <StatCard
-          label="Active Users"
-          value={stats.totalUsers.toLocaleString()}
-          icon={<UserIcon />}
-          trend="+8.2%"
-        />
-        <StatCard
-          label="Total Likes"
-          value={stats.totalLikes.toLocaleString()}
-          icon={<TrendIcon />}
-          trend="+5.1%"
-        />
-        <StatCard
-          label="Most Liked Post"
+        {/* Stat cards grid */}
+        {/* WHY 4-column grid: Desktop-first responsive design
+            - 1 col on mobile, 2 on tablet, 4 on desktop
+            - Each card shows a key metric with trends
+            - Icons provide visual scanning capability */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {/* WHY StatCard as component: Consistent styling, easier to update all at once */}
+          <StatCard
+            label="Total Posts"
+            value={stats.totalPosts.toLocaleString()}
+            icon={<PostIcon />}
+            trend="+12.5%"
+          />
+          <StatCard
+            label="Active Users"
+            value={stats.totalUsers.toLocaleString()}
+            icon={<UserIcon />}
+            trend="+8.2%"
+          />
+          <StatCard
+            label="Total Likes"
+            value={stats.totalLikes.toLocaleString()}
+            icon={<TrendIcon />}
+            trend="+5.1%"
+          />
+          <StatCard
+            label="Most Liked Post"
           value={stats.topPost?.title ?? '—'}
           sub={stats.topPost ? `${stats.topPost.likes} likes` : undefined}
           icon={<StarIcon />}
@@ -227,7 +230,7 @@ export default function StatsPage(): React.ReactElement {
             />
           </ul>
         </div>
-
+       </div>
       </div>
     </div>
   )
