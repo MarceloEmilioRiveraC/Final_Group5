@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Search, X, SlidersHorizontal, Heart } from 'lucide-react';
 import type { Category, Product } from '@domain/entities/Category'
 import { useCatalogue } from '@presentation/hooks/useCatalogue'
-import '@shared/utils/catalogue.css'
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -34,20 +33,20 @@ function gradientFor(id: number) {
 
 function Navbar() {
   return (
-    <header className="navbar">
-      <div className="navbar-brand">
-        <span className="brand-icon">✦</span>
-        <span className="brand-name">INSPIRER</span>
+    <header className="sticky top-0 z-100 flex items-center justify-between px-10 h-[70px] bg-white border-b border-gray-200 shadow-sm">
+      <div className="flex items-center gap-2">
+        <span className="text-2xl text-purple-600">✦</span>
+        <span className="text-2xl font-serif font-light tracking-widest text-gray-900">INSPIRER</span>
       </div>
-      <nav className="navbar-links">
-        <a href="/">Home</a>
-        <a href="/catalogue" className="active">Catalogue</a>
+      <nav className="flex gap-8">
+        <a href="/" className="text-sm tracking-wide text-gray-500 hover:text-gray-900 transition-colors">Home</a>
+        <a href="/catalogue" className="text-sm tracking-wide text-gray-900">Catalogue</a>
       </nav>
-      <div className="navbar-icons">
-        <button aria-label="Search"></button>
-        <button aria-label="Account"></button>
-        <button aria-label="Favourites"></button>
-        <button aria-label="Cart"></button>
+      <div className="flex gap-5">
+        <button aria-label="Search" className="text-gray-600 hover:text-purple-600 transition-colors"></button>
+        <button aria-label="Account" className="text-gray-600 hover:text-purple-600 transition-colors"></button>
+        <button aria-label="Favourites" className="text-gray-600 hover:text-purple-600 transition-colors"></button>
+        <button aria-label="Cart" className="text-gray-600 hover:text-purple-600 transition-colors"></button>
       </div>
     </header>
   );
@@ -63,9 +62,13 @@ function CategoryBar({
   onSelect: (id: number | null) => void;
 }) {
   return (
-    <div className="category-bar">
+    <div className="flex gap-2 px-10 py-5 overflow-x-auto bg-white border-b border-gray-200 scroll-smooth scrollbar-hide">
       <button
-        className={`cat-pill ${selected === null ? 'active' : ''}`}
+        className={`flex-shrink-0 px-5 py-2 rounded-full border text-sm tracking-wider transition-all ${
+          selected === null
+            ? 'bg-purple-600 border-purple-600 text-white'
+            : 'border-gray-300 text-gray-600 hover:border-purple-600 hover:text-purple-600'
+        }`}
         onClick={() => onSelect(null)}
       >
         All Clothing
@@ -73,7 +76,11 @@ function CategoryBar({
       {categories.map((c) => (
         <button
           key={c.id}
-          className={`cat-pill ${selected === c.id ? 'active' : ''}`}
+          className={`flex-shrink-0 px-5 py-2 rounded-full border text-sm tracking-wider transition-all ${
+            selected === c.id
+              ? 'bg-purple-600 border-purple-600 text-white'
+              : 'border-gray-300 text-gray-600 hover:border-purple-600 hover:text-purple-600'
+          }`}
           onClick={() => onSelect(c.id)}
         >
           {c.name}
@@ -89,36 +96,44 @@ function ProductCard({ product, isTrending }: { product: Product; isTrending: bo
   const [liked, setLiked] = useState(false);
 
   return (
-    <div className="product-card">
+    <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer">
       <div
-        className="card-image"
-        style={!imgSrc || imgError ? { background: gradientFor(product.id) } : undefined}
+        className="relative w-full overflow-hidden bg-cover bg-center"
+        style={{
+          paddingTop: '130%',
+          background: !imgSrc || imgError ? gradientFor(product.id) : undefined
+        }}
       >
         {imgSrc && !imgError && (
           <img
             src={imgSrc}
             alt={product.title}
+            className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-300"
             onError={() => setImgError(true)}
           />
         )}
 
         {isTrending && (
-          <span className="trending-badge">✦ TRENDING!</span>
+          <span className="absolute top-3 left-3 bg-purple-600 text-white text-xs font-semibold px-2 py-1 rounded italic tracking-widest">
+            ✦ TRENDING!
+          </span>
         )}
 
         <button
-          className={`like-btn ${liked ? 'liked' : ''}`}
+          className={`absolute top-2.5 right-2.5 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur transition-transform hover:scale-110 ${
+            liked ? 'bg-red-50' : 'bg-white/85'
+          }`}
           onClick={() => setLiked(!liked)}
           aria-label="Like"
         >
-          <Heart size={16} fill={liked ? '#e11d48' : 'none'} />
+          <Heart size={16} fill={liked ? '#e11d48' : 'none'} color={liked ? '#e11d48' : 'currentColor'} />
         </button>
       </div>
 
-      <div className="card-info">
-        <p className="card-category">{product.category.name}</p>
-        <h3 className="card-title">{product.title}</h3>
-        <p className="card-price">${product.price.toLocaleString()}</p>
+      <div className="p-4">
+        <p className="text-xs font-semibold text-purple-600 uppercase tracking-widest mb-1">{product.category.name}</p>
+        <h3 className="text-sm font-normal leading-5 text-gray-900 mb-2 line-clamp-2">{product.title}</h3>
+        <p className="text-sm font-semibold text-gray-800">${product.price.toLocaleString()}</p>
       </div>
     </div>
   );
@@ -126,12 +141,12 @@ function ProductCard({ product, isTrending }: { product: Product; isTrending: bo
 
 function SkeletonCard() {
   return (
-    <div className="product-card skeleton">
-      <div className="card-image skeleton-img" />
-      <div className="card-info">
-        <div className="skel-line short" />
-        <div className="skel-line" />
-        <div className="skel-line short" />
+    <div className="bg-white rounded-2xl overflow-hidden">
+      <div className="w-full bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse" style={{ paddingTop: '130%' }} />
+      <div className="p-4">
+        <div className="h-3 bg-gray-200 rounded mb-2 w-1/2"></div>
+        <div className="h-3 bg-gray-200 rounded mb-2"></div>
+        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
       </div>
     </div>
   );
@@ -162,15 +177,16 @@ export default function CataloguePage() {
 
       {/* Inline search bar */}
       {showSearch && (
-        <div className="search-bar-wrap">
-          <Search size={16} color="#888" />
+        <div className="flex items-center gap-3 px-10 py-3 bg-white border-b border-gray-200 animate-in slide-in-from-top">
+          <Search size={16} className="text-gray-500" />
           <input
             autoFocus
             placeholder="Search clothing..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            className="flex-1 text-sm border-b border-gray-300 outline-none focus:border-purple-600 transition-colors py-1"
           />
-          <button onClick={() => { setShowSearch(false); setSearchQuery(''); }}>
+          <button onClick={() => { setShowSearch(false); setSearchQuery(''); }} className="text-gray-500 hover:text-gray-700">
             <X size={16} />
           </button>
         </div>
@@ -182,26 +198,29 @@ export default function CataloguePage() {
         onSelect={setSelectedCategory}
       />
 
-      <main className="catalogue-page">
-        <div className="catalogue-header">
-          <h1>
+      <main className="px-10 py-8 pb-16 bg-gray-50">
+        <div className="flex items-center justify-between mb-7">
+          <h1 className="text-2xl font-light tracking-wide text-gray-900">
             {selectedCategory
               ? categories.find((c: Category) => c.id === selectedCategory)?.name ?? 'Products'
               : 'All Clothing'}
           </h1>
-          <button className="filter-btn" onClick={() => setShowSearch((s) => !s)}>
+          <button 
+            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:border-purple-600 hover:text-purple-600 transition-all"
+            onClick={() => setShowSearch((s) => !s)}
+          >
             <SlidersHorizontal size={15} />
             {showSearch ? 'Close' : 'Search'}
           </button>
         </div>
 
-        {error && <p className="error-msg">{error}</p>}
+        {error && <p className="text-center text-red-500 py-12">{error}</p>}
 
-        <div className="product-grid">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {loading
             ? Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
             : filtered.length === 0
-              ? <p className="no-results">No products found.</p>
+              ? <p className="col-span-full text-center text-gray-500 py-16">No products found.</p>
               : filtered.map((p: Product, i: number) => (
                   <ProductCard key={p.id} product={p} isTrending={i === 0} />
                 ))
@@ -209,8 +228,12 @@ export default function CataloguePage() {
         </div>
 
         {!loading && hasMore && !searchQuery && (
-          <div className="load-more-wrap">
-            <button className="load-more-btn" onClick={handleLoadMore} disabled={loadingMore}>
+          <div className="text-center mt-10">
+            <button 
+              className="px-10 py-3 border-2 border-purple-600 text-purple-600 rounded-full font-medium hover:bg-purple-600 hover:text-white transition-all disabled:opacity-50 disabled:cursor-default"
+              onClick={handleLoadMore} 
+              disabled={loadingMore}
+            >
               {loadingMore ? 'Loading…' : 'Load More'}
             </button>
           </div>
