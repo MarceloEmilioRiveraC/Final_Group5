@@ -3,7 +3,6 @@ import { Search, X, SlidersHorizontal, Heart, ShoppingCart } from 'lucide-react'
 import type { Category, Product } from '@domain/entities/Category'
 import { useCatalogue } from '@presentation/hooks/useCatalogue'
 import { postsApi } from '@infrastructure/services/postsAPI'
-import '@shared/utils/catalogue.css'
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -35,20 +34,20 @@ function gradientFor(id: number) {
 
 function Navbar() {
   return (
-    <header className="navbar">
-      <div className="navbar-brand">
-        <span className="brand-icon">✦</span>
-        <span className="brand-name">INSPIRER</span>
+    <header className="sticky top-0 z-100 flex items-center justify-between px-10 h-[70px] bg-white border-b border-amber-100 shadow-sm">
+      <div className="flex items-center gap-2">
+        <span className="text-2xl text-purple-600">✦</span>
+        <span className="text-2xl font-light tracking-widest text-gray-900">INSPIRER</span>
       </div>
-      <nav className="navbar-links">
-        <a href="/">Home</a>
-        <a href="/catalogue" className="active">Catalogue</a>
+      <nav className="flex gap-8">
+        <a href="/" className="text-sm tracking-wider text-gray-500 transition-colors hover:text-gray-900">Home</a>
+        <a href="/catalogue" className="text-sm tracking-wider text-gray-900 transition-colors hover:text-gray-900">Catalogue</a>
       </nav>
-      <div className="navbar-icons">
-        <button aria-label="Search"></button>
-        <button aria-label="Account"></button>
-        <button aria-label="Favourites"></button>
-        <button aria-label="Cart"></button>
+      <div className="flex gap-4">
+        <button aria-label="Search" className="transition-colors text-gray-600 hover:text-purple-600"></button>
+        <button aria-label="Account" className="transition-colors text-gray-600 hover:text-purple-600"></button>
+        <button aria-label="Favourites" className="transition-colors text-gray-600 hover:text-purple-600"></button>
+        <button aria-label="Cart" className="transition-colors text-gray-600 hover:text-purple-600"></button>
       </div>
     </header>
   );
@@ -64,9 +63,13 @@ function CategoryBar({
   onSelect: (id: number | null) => void;
 }) {
   return (
-    <div className="category-bar">
+    <div className="flex gap-2 px-10 py-5 overflow-x-auto bg-white border-b border-amber-100 scrollbar-hide">
       <button
-        className={`cat-pill ${selected === null ? 'active' : ''}`}
+        className={`flex-shrink-0 px-5 py-2 rounded-full border border-gray-300 text-sm tracking-wider cursor-pointer transition-all ${
+          selected === null
+            ? 'bg-purple-600 border-purple-600 text-white'
+            : 'bg-transparent text-gray-700 hover:border-purple-600 hover:text-purple-600'
+        }`}
         onClick={() => onSelect(null)}
       >
         All Clothing
@@ -74,7 +77,11 @@ function CategoryBar({
       {categories.map((c) => (
         <button
           key={c.id}
-          className={`cat-pill ${selected === c.id ? 'active' : ''}`}
+          className={`flex-shrink-0 px-5 py-2 rounded-full border border-gray-300 text-sm tracking-wider cursor-pointer transition-all ${
+            selected === c.id
+              ? 'bg-purple-600 border-purple-600 text-white'
+              : 'bg-transparent text-gray-700 hover:border-purple-600 hover:text-purple-600'
+          }`}
           onClick={() => onSelect(c.id)}
         >
           {c.name}
@@ -121,46 +128,59 @@ function ProductCard({ product, isTrending }: { product: Product; isTrending: bo
   };
 
   return (
-    <div className="product-card">
+    <div className="rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 cursor-pointer">
       <div
-        className="card-image"
+        className="relative w-full pt-[130%] overflow-hidden bg-cover bg-center"
         style={!imgSrc || imgError ? { background: gradientFor(product.id) } : undefined}
       >
         {imgSrc && !imgError && (
           <img
             src={imgSrc}
             alt={product.title}
+            className="absolute inset-0 w-full h-full object-cover transition-transform hover:scale-105"
             onError={() => setImgError(true)}
           />
         )}
 
         {isTrending && (
-          <span className="trending-badge">✦ TRENDING!</span>
+          <span className="absolute top-3 left-3 bg-purple-600 text-white text-xs tracking-wider font-semibold py-1 px-2 rounded italic">
+            ✦ TRENDING!
+          </span>
         )}
 
         <button
-          className={`like-btn ${liked ? 'liked' : ''}`}
+          className={`absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-transform backdrop-blur-sm ${
+            liked ? 'bg-pink-50' : 'bg-white/85'
+          } hover:scale-125 disabled:opacity-60 disabled:cursor-not-allowed`}
           onClick={handleLike}
           disabled={likeLoading}
           aria-label="Like"
         >
           <Heart size={16} fill={liked ? '#e11d48' : 'none'} />
-          {likeCount > 0 && <span className="count">{likeCount}</span>}
+          {likeCount > 0 && (
+            <span className="absolute bottom-0 right-0 bg-rose-600 text-white text-xs font-semibold rounded-full w-[18px] h-[18px] flex items-center justify-center -mb-1 -mr-1">
+              {likeCount}
+            </span>
+          )}
         </button>
       </div>
 
-      <div className="card-info">
-        <p className="card-category">{product.category.name}</p>
-        <h3 className="card-title">{product.title}</h3>
-        <p className="card-price">${product.price.toLocaleString()}</p>
+      <div className="p-3">
+        <p className="text-xs tracking-widest uppercase text-purple-600 mb-1">{product.category.name}</p>
+        <h3 className="text-sm font-normal leading-snug text-gray-900 mb-2 line-clamp-2">{product.title}</h3>
+        <p className="text-sm font-semibold text-gray-800 mb-3">${product.price.toLocaleString()}</p>
         
-        <div className="card-stats">
-          <span className="stat-item">♥ {likeCount}</span>
-          <span className="stat-item">🛒 {buyCount}</span>
+        <div className="flex gap-4 mb-2 text-xs text-gray-600">
+          <span className="flex items-center gap-1">♥ {likeCount}</span>
+          <span className="flex items-center gap-1">🛒 {buyCount}</span>
         </div>
 
         <button
-          className={`buy-btn ${buyLoading ? 'loading' : ''}`}
+          className={`w-full py-2 px-3 rounded-lg text-xs font-medium tracking-wider flex items-center justify-center gap-2 transition-all ${
+            buyLoading
+              ? 'bg-gray-100 text-gray-500 border border-gray-200'
+              : 'border border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white'
+          } disabled:opacity-60 disabled:cursor-not-allowed`}
           onClick={handleBuy}
           disabled={buyLoading}
         >
@@ -174,12 +194,12 @@ function ProductCard({ product, isTrending }: { product: Product; isTrending: bo
 
 function SkeletonCard() {
   return (
-    <div className="product-card skeleton">
-      <div className="card-image skeleton-img" />
-      <div className="card-info">
-        <div className="skel-line short" />
-        <div className="skel-line" />
-        <div className="skel-line short" />
+    <div className="rounded-2xl overflow-hidden bg-white shadow-sm">
+      <div className="w-full pt-[130%] bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse" />
+      <div className="p-3 space-y-2">
+        <div className="h-3 bg-gray-200 rounded w-14 animate-pulse" />
+        <div className="h-3 bg-gray-200 rounded animate-pulse" />
+        <div className="h-3 bg-gray-200 rounded w-14 animate-pulse" />
       </div>
     </div>
   );
@@ -210,15 +230,16 @@ export default function CataloguePage() {
 
       {/* Inline search bar */}
       {showSearch && (
-        <div className="search-bar-wrap">
+        <div className="bg-white border-b border-amber-100 px-10 py-3 flex items-center gap-3 animate-slideDown">
           <Search size={16} color="#888" />
           <input
             autoFocus
             placeholder="Search clothing..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-purple-600 transition-colors"
           />
-          <button onClick={() => { setShowSearch(false); setSearchQuery(''); }}>
+          <button onClick={() => { setShowSearch(false); setSearchQuery(''); }} className="text-gray-500 hover:text-gray-700">
             <X size={16} />
           </button>
         </div>
@@ -230,26 +251,26 @@ export default function CataloguePage() {
         onSelect={setSelectedCategory}
       />
 
-      <main className="catalogue-page">
-        <div className="catalogue-header">
-          <h1>
+      <main className="px-10 py-8 pb-16">
+        <div className="flex items-center justify-between mb-7">
+          <h1 className="text-2xl font-light tracking-wide text-gray-900">
             {selectedCategory
               ? categories.find((c: Category) => c.id === selectedCategory)?.name ?? 'Products'
               : 'All Clothing'}
           </h1>
-          <button className="filter-btn" onClick={() => setShowSearch((s) => !s)}>
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm cursor-pointer transition-all hover:border-purple-600 hover:text-purple-600" onClick={() => setShowSearch((s) => !s)}>
             <SlidersHorizontal size={15} />
             {showSearch ? 'Close' : 'Search'}
           </button>
         </div>
 
-        {error && <p className="error-msg">{error}</p>}
+        {error && <p className="text-center text-rose-500 py-12">{error}</p>}
 
-        <div className="product-grid">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {loading
             ? Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
             : filtered.length === 0
-              ? <p className="no-results">No products found.</p>
+              ? <p className="col-span-full text-center py-16 text-gray-400">No products found.</p>
               : filtered.map((p: Product, i: number) => (
                   <ProductCard key={p.id} product={p} isTrending={i === 0} />
                 ))
@@ -257,8 +278,8 @@ export default function CataloguePage() {
         </div>
 
         {!loading && hasMore && !searchQuery && (
-          <div className="load-more-wrap">
-            <button className="load-more-btn" onClick={handleLoadMore} disabled={loadingMore}>
+          <div className="text-center mt-10">
+            <button className="px-10 py-3 border-2 border-purple-600 rounded-full bg-transparent text-purple-600 text-sm tracking-wider cursor-pointer transition-all hover:bg-purple-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed" onClick={handleLoadMore} disabled={loadingMore}>
               {loadingMore ? 'Loading…' : 'Load More'}
             </button>
           </div>
