@@ -1,5 +1,4 @@
 import type { Category, Product } from '@domain/entities/Category';
-import lotusImage from '@presentation/assets/lotus.png'
 const BACKEND_URL = 'http://localhost:5000/api';
 const EXTERNAL_URL = 'https://api.escuelajs.co/api/v1';
 
