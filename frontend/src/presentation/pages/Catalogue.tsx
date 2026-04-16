@@ -36,26 +36,65 @@ function gradientFor(id: number) {
 
 function Navbar() {
   const navigate = useNavigate();
-  
+  const { user } = useAuth();
+
+  const isAdmin = user?.role === 'admin';
+
   return (
     <header className="sticky top-0 z-100 flex items-center justify-between px-10 h-[70px] bg-white border-b border-amber-100 shadow-sm">
       <div className="flex items-center gap-2">
         <span className="text-2xl text-purple-600">✦</span>
-        <span className="text-2xl font-light tracking-widest text-gray-900">INSPIRER</span>
+        <span className="text-2xl font-light tracking-widest text-gray-900">
+          INSPIRER
+        </span>
       </div>
+
       <nav className="flex gap-8 items-center">
-        <a href="/" className="text-sm tracking-wider text-gray-500 transition-colors hover:text-gray-900">Home</a>
-        <a href="/catalogue" className="text-sm tracking-wider text-gray-900 transition-colors hover:text-gray-900">Catalogue</a>
-        <button onClick={() => navigate('/stats')} className="flex items-center gap-2 text-sm tracking-wider text-gray-500 transition-colors hover:text-purple-600">
-          <BarChart3 size={18} />
-          Statistics
-        </button>
+        <a
+          href="/"
+          className="text-sm tracking-wider text-gray-500 transition-colors hover:text-gray-900"
+        >
+          Home
+        </a>
+
+        <a
+          href="/catalogue"
+          className="text-sm tracking-wider text-gray-900 transition-colors hover:text-gray-900"
+        >
+          Catalogue
+        </a>
+
+        {isAdmin && (
+          <button
+            onClick={() => navigate('/stats')}
+            className="flex items-center gap-2 text-sm tracking-wider text-gray-500 transition-colors hover:text-purple-600"
+          >
+            <BarChart3 size={18} />
+            Statistics
+          </button>
+        )}
       </nav>
+
       <div className="flex gap-4">
-        <button aria-label="Search" className="transition-colors text-gray-600 hover:text-purple-600"></button>
-        <button aria-label="Account" className="transition-colors text-gray-600 hover:text-purple-600"></button>
-        <button aria-label="Favourites" className="transition-colors text-gray-600 hover:text-purple-600"></button>
-        <button aria-label="Cart" className="transition-colors text-gray-600 hover:text-purple-600"></button>
+        <button
+          aria-label="Search"
+          className="transition-colors text-gray-600 hover:text-purple-600"
+        ></button>
+
+        <button
+          aria-label="Account"
+          className="transition-colors text-gray-600 hover:text-purple-600"
+        ></button>
+
+        <button
+          aria-label="Favourites"
+          className="transition-colors text-gray-600 hover:text-purple-600"
+        ></button>
+
+        <button
+          aria-label="Cart"
+          className="transition-colors text-gray-600 hover:text-purple-600"
+        ></button>
       </div>
     </header>
   );
