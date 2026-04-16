@@ -1,42 +1,12 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Header } from '@presentation/components/common/Header'
 
 export function HomePage() {
-  const [menuOpen] = useState(false)
   const navigate = useNavigate()
 
   return (
     <div className="flex flex-col min-h-screen font-custom-sans bg-white">
       <Header />
-
-      <nav className="bg-purple-900 px-6 py-0.5">
-        <ul
-          className={`flex items-center justify-center gap-0 h-14 list-none ${
-            menuOpen ? 'open' : ''
-          }`}
-        >
-          <li>
-            <a
-              href="#home"
-              className="text-lg font-normal text-white no-underline px-7 transition-opacity hover:opacity-85"
-            >
-              Home
-            </a>
-          </li>
-          <li className="text-white opacity-55 text-xl leading-none select-none">
-            |
-          </li>
-          <li>
-            <a
-              href="#about"
-              className="text-lg font-normal text-white no-underline px-7 transition-opacity hover:opacity-85"
-            >
-              About
-            </a>
-          </li>
-        </ul>
-      </nav>
 
       <main className="grid grid-cols-1 lg:grid-cols-2 flex-1 min-h-[620px]">
         {/* Left Section */}
