@@ -1,8 +1,10 @@
-import { useState } from 'react';
-import { Search, X, SlidersHorizontal, Heart, ShoppingCart } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Search, X, SlidersHorizontal, Heart, ShoppingCart, Trash2, BarChart3 } from 'lucide-react';
 import type { Category, Product } from '@domain/entities/Category'
 import { useCatalogue } from '@presentation/hooks/useCatalogue'
 import { postsApi } from '@infrastructure/services/postsAPI'
+import { useAuth } from '@app/providers/AuthProvider'
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -33,15 +35,21 @@ function gradientFor(id: number) {
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
 function Navbar() {
+  const navigate = useNavigate();
+  
   return (
     <header className="sticky top-0 z-100 flex items-center justify-between px-10 h-[70px] bg-white border-b border-amber-100 shadow-sm">
       <div className="flex items-center gap-2">
         <span className="text-2xl text-purple-600">✦</span>
         <span className="text-2xl font-light tracking-widest text-gray-900">INSPIRER</span>
       </div>
-      <nav className="flex gap-8">
+      <nav className="flex gap-8 items-center">
         <a href="/" className="text-sm tracking-wider text-gray-500 transition-colors hover:text-gray-900">Home</a>
         <a href="/catalogue" className="text-sm tracking-wider text-gray-900 transition-colors hover:text-gray-900">Catalogue</a>
+        <button onClick={() => navigate('/stats')} className="flex items-center gap-2 text-sm tracking-wider text-gray-500 transition-colors hover:text-purple-600">
+          <BarChart3 size={18} />
+          Statistics
+        </button>
       </nav>
       <div className="flex gap-4">
         <button aria-label="Search" className="transition-colors text-gray-600 hover:text-purple-600"></button>
@@ -91,24 +99,32 @@ function CategoryBar({
   );
 }
 
-function ProductCard({ product, isTrending }: { product: Product; isTrending: boolean }) {
+function ProductCard({ product, isTrending, onDelete }: { product: Product; isTrending: boolean; onDelete?: (id: string | number) => void }) {
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
+  
   const imgSrc = safeImage(product.images);
   const [imgError, setImgError] = useState(false);
   const [liked, setLiked] = useState(false);
   const [likeLoading, setLikeLoading] = useState(false);
   const [buyLoading, setBuyLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [buyCount, setBuyCount] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   const handleLike = async () => {
     if (likeLoading) return;
     setLikeLoading(true);
+    setError(null);
     try {
-      await postsApi.likePost(String(product.id));
+      const response = await postsApi.likePost(String(product.id));
       setLiked(true);
-      setLikeCount(likeCount + 1);
+      // Update counts from API response instead of incrementing
+      setLikeCount(response.likes ?? likeCount + 1);
     } catch (err) {
       console.error('Failed to like product:', err);
+      setError('Failed to like product');
     } finally {
       setLikeLoading(false);
     }
@@ -117,13 +133,35 @@ function ProductCard({ product, isTrending }: { product: Product; isTrending: bo
   const handleBuy = async () => {
     if (buyLoading) return;
     setBuyLoading(true);
+    setError(null);
     try {
-      await postsApi.buyPost(String(product.id));
-      setBuyCount(buyCount + 1);
+      const response = await postsApi.buyPost(String(product.id));
+      // Update counts from API response instead of incrementing
+      setBuyCount(response.bought ?? buyCount + 1);
     } catch (err) {
       console.error('Failed to buy product:', err);
+      setError('Failed to buy product');
     } finally {
       setBuyLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (deleteLoading || !isAdmin) return;
+    
+    const confirmed = window.confirm('Are you sure you want to delete this product?');
+    if (!confirmed) return;
+    
+    setDeleteLoading(true);
+    setError(null);
+    try {
+      await postsApi.deletePost(String(product.id));
+      onDelete?.(product.id);
+    } catch (err) {
+      console.error('Failed to delete product:', err);
+      setError('Failed to delete product');
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -155,6 +193,7 @@ function ProductCard({ product, isTrending }: { product: Product; isTrending: bo
           onClick={handleLike}
           disabled={likeLoading}
           aria-label="Like"
+          title="Like product"
         >
           <Heart size={16} fill={liked ? '#e11d48' : 'none'} />
           {likeCount > 0 && (
@@ -163,12 +202,26 @@ function ProductCard({ product, isTrending }: { product: Product; isTrending: bo
             </span>
           )}
         </button>
+
+        {isAdmin && (
+          <button
+            className="absolute top-2 left-2 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-transform backdrop-blur-sm bg-red-50 hover:bg-red-100 hover:scale-125 disabled:opacity-60 disabled:cursor-not-allowed"
+            onClick={handleDelete}
+            disabled={deleteLoading}
+            aria-label="Delete"
+            title="Delete product (admin only)"
+          >
+            <Trash2 size={16} className="text-red-600" />
+          </button>
+        )}
       </div>
 
       <div className="p-3">
         <p className="text-xs tracking-widest uppercase text-purple-600 mb-1">{product.category.name}</p>
         <h3 className="text-sm font-normal leading-snug text-gray-900 mb-2 line-clamp-2">{product.title}</h3>
         <p className="text-sm font-semibold text-gray-800 mb-3">${product.price.toLocaleString()}</p>
+        
+        {error && <p className="text-xs text-red-500 mb-2">{error}</p>}
         
         <div className="flex gap-4 mb-2 text-xs text-gray-600">
           <span className="flex items-center gap-1">♥ {likeCount}</span>
@@ -212,9 +265,20 @@ export default function CataloguePage() {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
+  const [displayedProducts, setDisplayedProducts] = useState(products);
+
+  // Filter to only show Clothing and Shoes
+  const filteredCategories = categories.filter(c => 
+    c.name === 'Clothing' || c.name === 'Shoes'
+  );
+
+  // Update displayed products when products change
+  useEffect(() => {
+    setDisplayedProducts(products);
+  }, [products]);
 
   // Filter products by category and search query
-  const filtered = products.filter((p: Product) => {
+  const filtered = displayedProducts.filter((p: Product) => {
     const matchesCategory = !selectedCategory || p.category.id === selectedCategory;
     const matchesSearch = !searchQuery || p.title.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
@@ -222,6 +286,10 @@ export default function CataloguePage() {
 
   const handleLoadMore = async () => {
     await loadMore(selectedCategory || undefined);
+  };
+
+  const handleDeleteProduct = (productId: string | number) => {
+    setDisplayedProducts(prev => prev.filter(p => String(p.id) !== String(productId)));
   };
 
   return (
@@ -246,7 +314,7 @@ export default function CataloguePage() {
       )}
 
       <CategoryBar
-        categories={categories}
+        categories={filteredCategories}
         selected={selectedCategory}
         onSelect={setSelectedCategory}
       />
@@ -272,7 +340,7 @@ export default function CataloguePage() {
             : filtered.length === 0
               ? <p className="col-span-full text-center py-16 text-gray-400">No products found.</p>
               : filtered.map((p: Product, i: number) => (
-                  <ProductCard key={p.id} product={p} isTrending={i === 0} />
+                  <ProductCard key={p.id} product={p} isTrending={i === 0} onDelete={handleDeleteProduct} />
                 ))
           }
         </div>
