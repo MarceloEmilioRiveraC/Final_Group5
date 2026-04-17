@@ -1,0 +1,24 @@
+meta {
+  name: Likes
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{baseUrl}}/api/posts/69e00b874839cd6215e02d47/like
+  body: none
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer {{accessToken}}
+}
+
+vars:pre-request {
+  id: 69dff8ed12f46274a49d479a
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,24 @@
+meta {
+  name: Shared
+  type: http
+  seq: 8
+}
+
+patch {
+  url: {{baseUrl}}/api/posts/69e00b874839cd6215e02d47/share
+  body: none
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer {{accessToken}}
+}
+
+vars:pre-request {
+  id: 69e00b874839cd6215e02d47
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

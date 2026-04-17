@@ -1,0 +1,25 @@
+meta {
+  name: Get_User_Profile
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/users/profile
+  body: none
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{accessToken}}
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: 
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

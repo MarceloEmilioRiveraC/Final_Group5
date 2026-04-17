@@ -1,0 +1,16 @@
+meta {
+  name: Posts
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/post
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
