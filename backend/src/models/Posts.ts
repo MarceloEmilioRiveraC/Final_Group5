@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 
 const PostSchema = new mongoose.Schema({
-  _id:        { type: String, required: true, unique: true },
   title:       { type: String, required: true, minlength: 3 },
   description: { type: String, default: '' },
   imageUrl:    { type: String, required: true },

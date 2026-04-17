@@ -5,12 +5,17 @@ import StatsPage from '@presentation/pages/StatsPage'
 import { HomePage } from '@presentation/pages/Home'
 import { LoginPage } from '@presentation/pages/login_page'
 import { RegisterPage } from '@presentation/pages/register_page'
+import CataloguePage from '@presentation/pages/Catalogue'
 
-const ProtectedLayout = ({ children }: { children: React.ReactNode }) => (
-  <ProtectedRoute>{children}</ProtectedRoute>
+const ProtectedLayout = ({ children, requiredRole }: { children: React.ReactNode; requiredRole?: 'admin' | 'customer' }) => (
+  <ProtectedRoute requiredRole={requiredRole}>{children}</ProtectedRoute>
 )
 
 export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <HomePage />, 
+  },
   {
     path: '/login',
     element: <LoginPage />,
@@ -20,21 +25,11 @@ export const router = createBrowserRouter([
     element: <RegisterPage />,
   },
   {
-    path: '/',
+    path: '/catalogue',
     element: (
       <AppProvider>
         <ProtectedLayout>
-          <HomePage />
-        </ProtectedLayout>
-      </AppProvider>
-    ),
-  },
-  {
-    path: '/home',
-    element: (
-      <AppProvider>
-        <ProtectedLayout>
-          <HomePage />
+          <CataloguePage />
         </ProtectedLayout>
       </AppProvider>
     ),
@@ -43,7 +38,7 @@ export const router = createBrowserRouter([
     path: '/stats',
     element: (
       <AppProvider>
-        <ProtectedLayout>
+        <ProtectedLayout requiredRole="admin">
           <StatsPage />
         </ProtectedLayout>
       </AppProvider>

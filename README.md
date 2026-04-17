@@ -49,7 +49,6 @@ Presentation → Application → Domain ← Infrastructure
 
   * GetPosts
   * CreatePost
-  * AddComment
 
 ### 3. Infrastructure Layer
 

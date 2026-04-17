@@ -40,9 +40,6 @@ export const Header = () => {
       {/* Purple Navbar */}
       <div className="bg-purple-900 text-white py-3 flex justify-center gap-8 font-medium">
         <a href="/" className="hover:text-gray-300">Home</a>
-        <a href="#" className="hover:text-gray-300">About</a>
-        <a href="#" className="hover:text-gray-300">Q&A</a>
-        <a href="#" className="hover:text-gray-300">Contact</a>
       </div>
     </div>
   )
