@@ -1,9 +1,6 @@
 import { Request, Response } from 'express'
 import * as postController from '../../controllers/postController'
 import * as postService from '../../services/postService'
-import { jest } from '@jest/globals'
-import { describe, it, expect, afterEach } from '@jest/globals'
-
 jest.mock('../../services/postService')
 
 const mockRes = (): Partial<Response> => ({

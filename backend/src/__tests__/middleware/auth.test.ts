@@ -8,8 +8,6 @@ import {
   AuthRequest,
 } from '../../middleware/auth'
 
-import { jest } from '@jest/globals'
-import { describe, it, expect, beforeEach } from '@jest/globals'
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
 
 describe('Auth Middleware', () => {

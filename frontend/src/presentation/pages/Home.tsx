@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import { Header } from '@presentation/components/common/Header'
+import { useAuth } from '@app/providers/AuthProvider'
 
 export function HomePage() {
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   return (
     <div className="flex flex-col min-h-screen font-custom-sans bg-white">
@@ -48,7 +50,7 @@ export function HomePage() {
             </p>
 
             <button
-              onClick={() => navigate('/login')}
+              onClick={() => navigate(user ? '/catalogue' : '/login')}
               className="inline-flex items-center justify-center mt-2 px-12 py-[18px] bg-purple-300 text-gray-900 font-bold text-sm tracking-widest uppercase rounded-full cursor-pointer transition-all hover:bg-purple-400 hover:shadow-lg active:translate-y-0"
               style={{
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)',
@@ -90,7 +92,7 @@ export function HomePage() {
             </p>
 
             <button
-              onClick={() => navigate('/login')}
+              onClick={() => navigate(user ? '/catalogue' : '/login')}
               className="inline-flex items-center justify-center mt-2 px-12 py-[18px] bg-purple-300 text-gray-900 font-bold text-sm tracking-widest uppercase rounded-full cursor-pointer transition-all hover:bg-purple-400 hover:shadow-lg active:translate-y-0"
               style={{
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)',

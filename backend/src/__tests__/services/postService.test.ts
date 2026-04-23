@@ -1,8 +1,6 @@
 import { PostModel } from '../../models/Posts'
 import * as statsService from '../../services/statsService'
 import * as postService from '../../services/postService'
-import { jest } from '@jest/globals'
-import { describe, it, expect, afterEach } from '@jest/globals'
 // Mock Mongoose PostModel
 jest.mock('../../models/Posts', () => {
   const mockSort = jest.fn()

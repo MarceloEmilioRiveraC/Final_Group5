@@ -1,7 +1,3 @@
-import { jest } from '@jest/globals'
-import { describe, it, expect, afterEach } from '@jest/globals'
-import { StatsModel } from '../../models/Stats'
-import * as statsService from '../../services/statsService'
 jest.mock('../../models/Stats')
 // Mock all Mongoose models
 jest.mock('../../models/Posts', () => ({
