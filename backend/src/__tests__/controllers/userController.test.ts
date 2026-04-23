@@ -2,7 +2,6 @@ import { Response } from 'express'
 import * as userController from '../../controllers/userController'
 import * as userService from '../../services/userService'
 import { AuthRequest } from '../../middleware/auth'
-
 jest.mock('../../services/userService')
 
 const mockRes = (): Partial<Response> => ({

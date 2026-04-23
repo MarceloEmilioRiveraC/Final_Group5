@@ -14,22 +14,30 @@ export const Header = () => {
     <div>
       {/* Top Bar */}
       <div className="bg-white px-6 py-4 flex justify-between items-center shadow">
-        <h1 className="text-2xl font-semibold tracking-wide text-gray-800">
+        <h1
+          className="text-2xl font-semibold tracking-wide text-gray-800 cursor-pointer"
+          onClick={() => navigate('/')}
+        >
           INSPIRER
         </h1>
 
         <div className="flex items-center gap-4">
           {user ? (
-            <button
-              onClick={handleLogout}
-              className="text-sm text-gray-600 hover:text-purple-600"
-            >
-              Logout
-            </button>
+            <>
+              <span className="text-sm text-gray-500">
+                Hello, <strong>{user.name}</strong>
+              </span>
+              <button
+                onClick={handleLogout}
+                className="text-sm text-gray-600 hover:text-purple-600 transition-colors"
+              >
+                Logout
+              </button>
+            </>
           ) : (
             <button
               onClick={() => navigate('/login')}
-              className="text-sm text-gray-600 hover:text-purple-600"
+              className="text-sm text-gray-600 hover:text-purple-600 transition-colors"
             >
               Login
             </button>
@@ -38,9 +46,23 @@ export const Header = () => {
       </div>
 
       {/* Purple Navbar */}
-      <div className="bg-purple-900 text-white py-3 flex justify-center gap-8 font-medium">
-        <a href="/" className="hover:text-gray-300">Home</a>
-      </div>
+      <nav className="bg-purple-900 text-white py-3 flex justify-center gap-8 font-medium text-sm">
+        <a href="/" className="hover:text-purple-200 transition-colors">
+          Home
+        </a>
+
+        {user && (
+          <a href="/catalogue" className="hover:text-purple-200 transition-colors">
+            Catalogue
+          </a>
+        )}
+
+        {user?.role === 'admin' && (
+          <a href="/stats" className="hover:text-purple-200 transition-colors">
+            Stats
+          </a>
+        )}
+      </nav>
     </div>
   )
 }
