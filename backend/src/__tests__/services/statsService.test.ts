@@ -1,3 +1,4 @@
+jest.mock('../../models/Stats')
 // Mock all Mongoose models
 jest.mock('../../models/Posts', () => ({
   PostModel: {
