@@ -4,6 +4,7 @@ const PostSchema = new mongoose.Schema({
   title:       { type: String, required: true, minlength: 3 },
   description: { type: String, default: '' },
   imageUrl:    { type: String, required: true },
+  price:       { type: Number, default: 0 },
   likes:       { type: Number, default: 0 },
   userId:      { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   shared:      { type: Number, default: 0 },

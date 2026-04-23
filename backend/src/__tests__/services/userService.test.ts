@@ -1,10 +1,5 @@
 import jwt from 'jsonwebtoken'
-imoport { UserModel, UserRole } from '../../models/User'
-import * as userService from '../../services/userService'
-import * as authMiddleware from '../../middleware/auth'
-import * as bcrypt from 'bcryptjs'
-import { jest } from '@jest/globals'
-import { describe, it, expect } from '@jest/globals'
+
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
 
 describe('UserService', () => {

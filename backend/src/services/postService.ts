@@ -9,6 +9,7 @@ export const createPost = async (data: {
   title: string
   description?: string
   imageUrl: string
+  price?: number
   userId: string
 }) => {
   const post = new PostModel(data)
