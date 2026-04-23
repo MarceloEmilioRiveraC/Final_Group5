@@ -1,0 +1,20 @@
+meta {
+  name: Delete
+  type: http
+  seq: 10
+}
+
+delete {
+  url: {{baseUrl}}/api/posts/69e00b874839cd6215e02d47
+  body: none
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer {{accessToken}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

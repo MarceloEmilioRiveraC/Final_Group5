@@ -1,0 +1,33 @@
+meta {
+  name: User_Post
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:5000/api/posts
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer {{accessToken}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "winter dress",
+    "description": "A nice winter look",
+    "imageUrl": "https://picsum.photos/400/300",
+    "userId": "69dff8ed12f46274a49d479a",
+    "likes": 2,
+    "shared": 3,
+    "bought": 2
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

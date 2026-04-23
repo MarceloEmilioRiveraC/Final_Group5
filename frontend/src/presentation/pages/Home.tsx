@@ -1,9 +1,8 @@
-
-import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Header } from '@presentation/components/common/Header'
 
 export function HomePage() {
-  const [menuOpen] = useState(false)
+  const navigate = useNavigate()
 
   return (
     <div className="min-h-screen flex flex-col font-lato">
