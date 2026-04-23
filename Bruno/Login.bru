@@ -1,0 +1,32 @@
+meta {
+  name: Login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/users/login
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGZhc2hpb24uY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzc2Mjg1OTkzLCJleHAiOjE3NzYyODY4OTN9.urA4YtZLItecol9ejLFjIWpt2u9QCMcjE1uTl2MAF5o
+}
+
+body:json {
+  {
+    "email": "admin@fashion.com",
+    "password": "admin123"
+  }
+}
+
+script:post-response {
+  const json = res.getBody()
+  bru.setEnvVar("accessToken", json.accessToken)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
