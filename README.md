@@ -1,10 +1,32 @@
-# 👕 Fashion Community Platform
+# 👕 INSPIRER · Fashion Community Platform
 
 ## 📌 Overview
 
 This project is a **Fashion Social Platform** where users can create posts about clothing, interact through comments, and engage with content. Administrators have access to analytics and moderation tools to manage the platform.
 
 The application is built with a strong focus on **Clean Architecture**, ensuring scalability, maintainability, and clear separation of concerns from the beginning.
+
+## Screenshots
+
+Real captures of the public home, run locally on October 12, 2026. The desktop viewport is 1600×1000; the mobile viewport is 390×898. These show the existing application UI, not a mockup or an authenticated dashboard.
+
+![INSPIRER public home on desktop](docs/screenshots/inspirer-home-desktop.webp)
+
+<img src="docs/screenshots/inspirer-home-mobile.png" alt="INSPIRER public home in a mobile viewport" width="280">
+
+The original desktop PNG is retained in [docs/screenshots](docs/screenshots). The photographs are the Unsplash assets already referenced by the application.
+
+To view the public home locally:
+
+```sh
+cd frontend
+npm ci
+npm run dev -- --host 127.0.0.1 --port 5181 --strictPort
+```
+
+Open `http://127.0.0.1:5181`. Authenticated catalogue, posting and administration flows require the backend and a local MongoDB configured as described below; those flows were not exercised for these screenshots.
+
+The frontend and backend builds passed. The frontend's eight existing Jest suites passed all 54 tests. This pass corrected the frontend TypeScript configuration, a post identifier type mismatch and an unused registration result; it did not change authentication or redesign the app.
 
 ---
 

@@ -84,7 +84,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setError(null)
 
     try {
-      const result = await authUseCases.register(email, password, name, role)
+      await authUseCases.register(email, password, name, role)
       // After registration, don't auto-login - redirect to login page
       // You can modify this behavior if you want auto-login after registration
     } catch (err: any) {
